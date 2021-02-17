@@ -1,5 +1,6 @@
 package flow;
 
+import computation.FitnessFunctionProvider;
 import domain.Individual;
 import domain.Population;
 
@@ -41,41 +42,6 @@ public class GeneticAlgorithm {
         return population;
     }
 
-    /**
-     * Calculate fitness for an individual.
-     *
-     * In this case, the fitness score is very simple: it's the number of ones
-     * in the chromosome. Don't forget that this method, and this whole
-     * GeneticAlgorithm class, is meant to solve the problem in the "AllOnesGA"
-     * class and example. For different problems, you'll need to create a
-     * different version of this method to appropriately calculate the fitness
-     * of an individual.
-     *
-     * @param individual
-     *            the individual to evaluate
-     * @return double The fitness value for individual
-     */
-    public double calcFitness(Individual individual) {
-
-        // Track number of correct genes
-        int correctGenes = 0;
-
-        // Loop over individual's genes
-        for (int geneIndex = 0; geneIndex < individual.getChromosomeLength(); geneIndex++) {
-            // Add one fitness point for each "1" found
-            if (individual.getGene(geneIndex) == 1) {
-                correctGenes += 1;
-            }
-        }
-
-        // Calculate fitness
-        double fitness = (double) correctGenes / individual.getChromosomeLength();
-
-        // Store fitness
-        individual.setFitness(fitness);
-
-        return fitness;
-    }
 
     /**
      * Evaluate the whole population
@@ -94,7 +60,7 @@ public class GeneticAlgorithm {
         // Loop over population evaluating individuals and suming population
         // fitness
         for (Individual individual : population.getIndividuals()) {
-            populationFitness += calcFitness(individual);
+            populationFitness += FitnessFunctionProvider.SIMPLE_FITNESS_FUNCTION.apply(individual);
         }
 
         population.setPopulationFitness(populationFitness);
@@ -128,7 +94,7 @@ public class GeneticAlgorithm {
      */
     public Individual selectParent(Population population) {
         // Get individuals
-        Individual individuals[] = population.getIndividuals();
+        Individual[] individuals = population.getIndividuals();
 
         // Spin roulette wheel
         double populationFitness = population.getPopulationFitness();

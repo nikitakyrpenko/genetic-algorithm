@@ -1,8 +1,8 @@
 package domain;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class Population {
 
@@ -20,6 +20,14 @@ public class Population {
             Individual individual = new Individual(chromosomeLength);
             this.population[individualCount] = individual;
         }
+    }
+
+
+    /*
+    * Used for Tournament selection
+    */
+    public Population(Individual[] individuals){
+        this.population = individuals;
     }
 
     public Individual[] getIndividuals() {
@@ -57,6 +65,12 @@ public class Population {
     public Individual getIndividual(int offset) {
         return population[offset];
     }
+
+    public void appendIndividuals(Individual[] other){
+        this.population = Stream.concat(Arrays.stream(this.getIndividuals()), Arrays.stream(other))
+                .toArray(Individual[]::new);
+    }
+
     public void shuffle() {
         Random rnd = new Random();
         for (int i = population.length - 1; i > 0; i--) {
@@ -67,4 +81,10 @@ public class Population {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Population{" +
+                "population=" + Arrays.toString(population) +
+                '}';
+    }
 }
