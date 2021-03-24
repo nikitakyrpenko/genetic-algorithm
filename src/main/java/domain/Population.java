@@ -1,57 +1,30 @@
 package domain;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Population {
 
-    private Individual population[];
-
-    private double populationFitness = -1;
-
-    public Population(int populationSize) {
-        this.population = new Individual[populationSize];
+    public enum  Members{
+        POPULATION,
+        PARENTS_PULL
     }
 
-    public Population(int populationSize, int chromosomeLength) {
-        this.population = new Individual[populationSize];
-        for (int individualCount = 0; individualCount < populationSize; individualCount++) {
-            Individual individual = new Individual(chromosomeLength);
-            this.population[individualCount] = individual;
-        }
-    }
+    private Individual[] population;
 
+    private Individual[] parentsPull;
 
     /*
-    * Used for Tournament selection
+    * Used for generate initial Population
     */
-    public Population(Individual[] individuals){
-        this.population = individuals;
+    public Population(Individual[] initialPopulation){
+        this.population = initialPopulation;
+
     }
 
     public Individual[] getIndividuals() {
         return this.population;
-    }
-
-    public Individual getFittest(int offset) {
-        Arrays.sort(this.population, (i1, i2) -> {
-            if (i1.getFitness() > i2.getFitness()) {
-                return -1;
-            } else if (i1.getFitness() < i2.getFitness()) {
-                return 1;
-            }
-            return 0;
-        });
-        return this.population[offset];
-    }
-
-    public void setPopulationFitness(double fitness) {
-        this.populationFitness = fitness;
-    }
-
-    public double getPopulationFitness() {
-        return this.populationFitness;
     }
 
     public int size() {
@@ -62,23 +35,40 @@ public class Population {
         return population[offset] = individual;
     }
 
-    public Individual getIndividual(int offset) {
+    public Individual getIndividualFrom(Members from, int offset) {
+        if (from.equals(Members.PARENTS_PULL))
+            return parentsPull[offset];
         return population[offset];
     }
 
-    public void appendIndividuals(Individual[] other){
-        this.population = Stream.concat(Arrays.stream(this.getIndividuals()), Arrays.stream(other))
-                .toArray(Individual[]::new);
+
+    public Individual[] getParentsPull() {
+        return parentsPull;
     }
 
-    public void shuffle() {
-        Random rnd = new Random();
-        for (int i = population.length - 1; i > 0; i--) {
-            int index = rnd.nextInt(i + 1);
-            Individual a = population[index];
-            population[index] = population[i];
-            population[i] = a;
+    public void setParentsPull(Individual[] parentsPull) {
+        if (Objects.nonNull(parentsPull)) {
+            this.parentsPull = parentsPull;
+            Arrays.sort(parentsPull, getFitnessComparator());
+        }else {
+            this.parentsPull = null;
         }
+    }
+
+    public void setPopulation(Individual[] population) {
+        this.population = population;
+        Arrays.sort(population, getFitnessComparator());
+    }
+
+    private Comparator<Individual> getFitnessComparator(){
+        return (o1, o2) -> {
+            if (o1.getFitness() > o2.getFitness()) {
+                return -1;
+            } else if (o1.getFitness() < o2.getFitness()) {
+                return 1;
+            }
+            return 0;
+        };
     }
 
     @Override

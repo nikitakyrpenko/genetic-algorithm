@@ -1,13 +1,32 @@
+import computation.GGSelectionProvider;
+import domain.Individual;
 import domain.Population;
-import flow.GeneticAlgorithm;
+import utilities.TournamentSettings;
+
+import java.lang.reflect.Member;
+import java.util.function.BiConsumer;
 
 public class Test {
     public static void main(String[] args) {
-        GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.95);
+        BiConsumer<TournamentSettings, Population> tourSelection = GGSelectionProvider.TOUR_SELECTION;
 
-        // Initialize population
-        Population population = ga.initPopulation(50);
+        Population population = initPopulation();
+
+        tourSelection.accept(new TournamentSettings(12, parentsPullSize, 10), population);
 
         System.out.println(population);
+    }
+
+    Members
+
+    private static Population initPopulation(){
+        Individual[] individuals = {
+                new Individual(new int[]{1,1,1,0}),
+                new Individual(new int[]{0,0,0,1}),
+                new Individual(new int[]{0,0,1,0}),
+                new Individual(new int[]{1,1,1,1})
+        };
+
+        return new Population(individuals);
     }
 }

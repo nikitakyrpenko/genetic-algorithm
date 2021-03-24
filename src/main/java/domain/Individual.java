@@ -1,23 +1,15 @@
 package domain;
 
+import java.util.function.Function;
+
 public class Individual {
 
-    private int[] chromosome;
+    private final double[] chromosome;
     private double fitness = -1;
 
-    public Individual(int[] chromosome){
+    public Individual(double[] chromosome, Function<Individual, Double> fitnessFunction){
         this.chromosome = chromosome;
-    }
-
-    public Individual(int chromosomeLength){
-        this.chromosome = new int[chromosomeLength];
-        for (int gene = 0; gene < chromosomeLength; gene++){
-            if (0.5 < Math.random()){
-                this.setGene(gene, 1);
-            }else {
-                this.setGene(gene, 0);
-            }
-        }
+        this.fitness = fitnessFunction.apply(this);
     }
 
     public double getFitness() {
@@ -28,7 +20,7 @@ public class Individual {
         this.fitness = fitness;
     }
 
-    public int[] getChromosome() {
+    public double[] getChromosome() {
         return chromosome;
     }
 
@@ -36,18 +28,18 @@ public class Individual {
         return this.chromosome.length;
     }
 
-    public int getGene(int offset) {
+    public double getGene(int offset) {
         return this.chromosome[offset];
     }
 
-    public void setGene(int offset, int gene) {
+    public void setGene(int offset, double gene) {
         this.chromosome[offset] = gene;
     }
 
     @Override
     public String toString() {
         String output = "";
-        for (int i : this.chromosome) {
+        for (double i : this.chromosome) {
             output += i;
         }
         return output;
