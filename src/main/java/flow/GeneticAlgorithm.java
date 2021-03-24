@@ -1,6 +1,6 @@
 package flow;
 
-import computation.FitnessFunctionProvider;
+import providers.FitnessFunctionProvider;
 import domain.Individual;
 import domain.Population;
 

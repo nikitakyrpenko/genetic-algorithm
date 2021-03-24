@@ -1,7 +1,8 @@
-package computation;
+package providers;
 
 import domain.Individual;
 import domain.Population;
+import domain.utils.GeneRange;
 import utilities.GeneralSettings;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -32,9 +33,41 @@ public class GGSelectionProvider {
 
 
     private static Individual[] APPLY_GAUSSIAN_MUTATION_AND_GENERATE_SIBLINGS(GeneralSettings settings, Individual tournamentWinner){
-        //TODO Implement gaussian mutation do not forgret about mutation probability
+        Individual[] siblings = new Individual[settings.getQuantityOfSiblings()];
 
-        return new Individual[3];
+        for (int i = 0; i < settings.getQuantityOfSiblings(); i++)
+           siblings[i] = generateSibling(settings, tournamentWinner);
+
+        return siblings;
+    }
+
+    private static Individual generateSibling(GeneralSettings settings, Individual parent){
+        Random random = new Random();
+
+        double mutationProbability = settings.getMutationProbability();
+        double sigma = settings.getEuclidAverageDistance() / 16;
+
+        double[] parentGenes = parent.getChromosome();
+        double[] siblingsGene = Arrays.copyOf(parentGenes, parentGenes.length);
+
+        for (int i = 0; i < siblingsGene.length; i++){
+            //do mutation
+            if (random.nextDouble() <= mutationProbability) {
+                double deviation = random.nextGaussian() * sigma;
+                siblingsGene[i] = checkIsSiblingGeneInBound(settings.getGeneRange(), siblingsGene[i] + deviation);
+            }
+        }
+        return  new Individual(siblingsGene, settings.getFitnessFunction());
+    }
+
+    private static double checkIsSiblingGeneInBound(GeneRange geneRange, double gene){
+        if (gene < geneRange.getBottomRange()){
+            return geneRange.getBottomRange();
+        }
+        else if (gene > geneRange.getTopRange()){
+            return geneRange.getTopRange();
+        }
+        return gene;
     }
 
     private static Individual generateTournamentMembersByNumbersOfContendersAndComputeWinner(int numberOfContenders, Individual[] initialPopulation){

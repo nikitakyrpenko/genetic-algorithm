@@ -1,9 +1,8 @@
-import computation.GGSelectionProvider;
+import providers.GGSelectionProvider;
 import domain.Individual;
 import domain.Population;
 import utilities.TournamentSettings;
 
-import java.lang.reflect.Member;
 import java.util.function.BiConsumer;
 
 public class Test {

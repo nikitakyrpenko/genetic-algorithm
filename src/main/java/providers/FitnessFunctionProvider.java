@@ -1,4 +1,4 @@
-package computation;
+package providers;
 
 import domain.Individual;
 

@@ -1,6 +1,5 @@
-package computation;
+package providers;
 
-import domain.Individual;
 import domain.Population;
 
 import java.util.Arrays;
