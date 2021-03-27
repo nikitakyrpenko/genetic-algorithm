@@ -1,31 +1,14 @@
-import providers.GGSelectionProvider;
-import domain.Individual;
-import domain.Population;
-import utilities.TournamentSettings;
+import domain.utils.fuds.FUDSHealthLevel;
+import domain.utils.fuds.FUDSMinMaxHealth;
+import providers.NextGenerationSelectionProvider;
 
-import java.util.function.BiConsumer;
+import java.util.List;
 
 public class Test {
     public static void main(String[] args) {
-        BiConsumer<TournamentSettings, Population> tourSelection = GGSelectionProvider.TOUR_SELECTION;
+        List<FUDSHealthLevel> healthLevels = NextGenerationSelectionProvider.generateHealthLevels(new FUDSMinMaxHealth(0.1, 0.8), 0.07);
 
-        Population population = initPopulation();
-
-        tourSelection.accept(new TournamentSettings(12, parentsPullSize, 10), population);
-
-        System.out.println(population);
+        System.out.println(healthLevels);
     }
 
-    Members
-
-    private static Population initPopulation(){
-        Individual[] individuals = {
-                new Individual(new int[]{1,1,1,0}),
-                new Individual(new int[]{0,0,0,1}),
-                new Individual(new int[]{0,0,1,0}),
-                new Individual(new int[]{1,1,1,1})
-        };
-
-        return new Population(individuals);
-    }
 }

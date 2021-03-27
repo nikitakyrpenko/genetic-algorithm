@@ -3,6 +3,8 @@ package computation;
 import domain.Individual;
 import domain.Population;
 
+import java.util.TreeSet;
+
 public class Computations {
 
     public static double COMPUTE_EUCLID_DISTANCE_FOR_POPULATION(Population population){
@@ -19,7 +21,9 @@ public class Computations {
         }
 
         return accumulator / distancesCount;
+
     }
+
 
     private static double computeEuclidDistance(Individual from, Individual to){
         return compute(from.getChromosome(), to.getChromosome());
