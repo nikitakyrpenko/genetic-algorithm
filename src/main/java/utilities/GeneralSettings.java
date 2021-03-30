@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class GeneralSettings {
 
-    private final int tournamentContenders;
+    private int tournamentContenders;
     private final int quantityOfSiblings;
     private final double euclidAverageDistance;
     private final double mutationProbability;
@@ -46,5 +46,9 @@ public class GeneralSettings {
 
     public Function<Individual, Double> getFitnessFunction() {
         return fitnessFunction;
+    }
+
+    public void setTournamentContenders(int tournamentContenders) {
+        this.tournamentContenders = tournamentContenders;
     }
 }

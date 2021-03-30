@@ -1,8 +1,9 @@
 package domain;
 
+import domain.utils.fuds.FUDSHealthLevel;
+
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class Population {
 
@@ -11,70 +12,65 @@ public class Population {
         PARENTS_PULL
     }
 
-    private Individual[] population;
+    private List<Individual> population;
 
-    private Individual[] parentsPull;
+    private List<Individual> parentsPull;
 
     /*
     * Used for generate initial Population
     */
-    public Population(Individual[] initialPopulation){
+    public Population(List<Individual> initialPopulation){
         this.population = initialPopulation;
 
     }
 
-    public Individual[] getIndividuals() {
+    public List<Individual> getIndividuals() {
         return this.population;
     }
 
     public int size() {
-        return this.population.length;
-    }
-
-    public Individual setIndividual(int offset, Individual individual) {
-        return population[offset] = individual;
-    }
-
-    public Individual getIndividualFrom(Members from, int offset) {
-        if (from.equals(Members.PARENTS_PULL))
-            return parentsPull[offset];
-        return population[offset];
+        return this.population.size();
     }
 
 
-    public Individual[] getParentsPull() {
+    public List<Individual> getParentsPull() {
         return parentsPull;
     }
 
-    public void setParentsPull(Individual[] parentsPull) {
+    public void setParentsPull(List<Individual> parentsPull) {
         if (Objects.nonNull(parentsPull)) {
             this.parentsPull = parentsPull;
-            Arrays.sort(parentsPull, getFitnessComparator());
+            this.parentsPull.sort(getFitnessComparator());
         }else {
             this.parentsPull = null;
         }
     }
 
-    public void setPopulation(Individual[] population) {
+    public void setPopulation(List<Individual> population) {
         this.population = population;
-        Arrays.sort(population, getFitnessComparator());
+        this.parentsPull.sort(getFitnessComparator());
     }
 
     private Comparator<Individual> getFitnessComparator(){
-        return (o1, o2) -> {
-            if (o1.getFitness() > o2.getFitness()) {
-                return -1;
-            } else if (o1.getFitness() < o2.getFitness()) {
-                return 1;
-            }
-            return 0;
-        };
+        return Comparator.comparing(Individual::getFitness);
+    }
+
+    public Map.Entry<FUDSHealthLevel, List<Individual>> findAllIndividualsByHealthLevel(FUDSHealthLevel healthLevel){
+        List<Individual> individualsByHealthLevel = this.population
+                .stream()
+                .filter(individual -> {
+                    double health = individual.getFitness();
+                    return health < healthLevel.getHighBound() && health >= healthLevel.getHighBound();
+                })
+                .collect(Collectors.toList());
+
+        return Map.entry(healthLevel, individualsByHealthLevel);
     }
 
     @Override
     public String toString() {
         return "Population{" +
-                "population=" + Arrays.toString(population) +
+                "population=" + population.toString() +
                 '}';
     }
 }

@@ -4,18 +4,17 @@ import domain.Individual;
 import domain.Population;
 import domain.utils.GeneRange;
 import utilities.GeneralSettings;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.NoSuchElementException;
-import java.util.Random;
+
+import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GGSelectionProvider {
 
     public static BiConsumer<GeneralSettings, Population> TOUR_SELECTION = (settings, population) -> {
 
-        Individual[] individuals = population.getIndividuals();
+        List<Individual> individuals = population.getIndividuals();
 
         Individual tournamentWinner = generateTournamentMembersByNumbersOfContendersAndComputeWinner(
                 settings.getTournamentContenders(),
@@ -26,8 +25,8 @@ public class GGSelectionProvider {
 
         population.setParentsPull(
                 Stream.concat(
-                    Arrays.stream(individuals), Arrays.stream(siblings))
-                .toArray(Individual[]::new)
+                    individuals.stream(), Arrays.stream(siblings))
+                .collect(Collectors.toList())
         );
     };
 
@@ -70,13 +69,13 @@ public class GGSelectionProvider {
         return gene;
     }
 
-    private static Individual generateTournamentMembersByNumbersOfContendersAndComputeWinner(int numberOfContenders, Individual[] initialPopulation){
+    private static Individual generateTournamentMembersByNumbersOfContendersAndComputeWinner(int numberOfContenders, List<Individual> initialPopulation){
 
         Random random = new Random();
         Individual[] tournamentMembers = new Individual[numberOfContenders];
 
         for (int i = 0; i < numberOfContenders; i++){
-            tournamentMembers[i] = initialPopulation[random.nextInt(initialPopulation.length)];
+            tournamentMembers[i] = initialPopulation.get(random.nextInt(initialPopulation.size()));
         }
 
         return findBest(tournamentMembers);

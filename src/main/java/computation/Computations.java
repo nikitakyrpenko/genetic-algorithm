@@ -3,25 +3,35 @@ package computation;
 import domain.Individual;
 import domain.Population;
 
+import java.util.List;
 import java.util.TreeSet;
 
 public class Computations {
 
     public static double COMPUTE_EUCLID_DISTANCE_FOR_POPULATION(Population population){
-        Individual[] individuals = population.getIndividuals();
+        List<Individual> individuals = population.getIndividuals();
 
         double accumulator = 0.0;
         int distancesCount = 0;
 
-        for (int i = 0; i < individuals.length; i++){
-            for (int j = i+1; j < individuals.length; j++){
-                accumulator += computeEuclidDistance(individuals[i], individuals[j]);
+        for (int i = 0; i < individuals.size(); i++){
+            for (int j = i+1; j < individuals.size(); j++){
+                accumulator += computeEuclidDistance(individuals.get(i), individuals.get(j));
                 distancesCount++;
             }
         }
 
         return accumulator / distancesCount;
 
+    }
+
+    public static double COMPUTE_AVERAGE_POPULATION_HEALTH(Population population){
+        double accumulator = 0.0;
+
+        for(Individual individual : population.getIndividuals())
+            accumulator += individual.getFitness();
+
+        return accumulator/population.size();
     }
 
 

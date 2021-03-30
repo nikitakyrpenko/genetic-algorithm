@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class Individual {
@@ -43,5 +45,21 @@ public class Individual {
             output += i;
         }
         return output;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Individual that = (Individual) object;
+        return Double.compare(that.fitness, fitness) == 0 &&
+                Arrays.equals(chromosome, that.chromosome);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(fitness);
+        result = 31 * result + Arrays.hashCode(chromosome);
+        return result;
     }
 }
