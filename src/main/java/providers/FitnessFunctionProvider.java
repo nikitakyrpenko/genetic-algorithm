@@ -34,14 +34,14 @@ public class FitnessFunctionProvider {
 
         double accum = fx(chromosome);
 
-        return accum * 1 / chromosome.length;
+        return accum * (1 / chromosome.length);
     };
 
     public static double fx(double[] x) {
         /*return Math.sin(5 * Math.PI * x);*/
-        return Arrays.stream(x)
-                .map(val -> Math.sin(5 * Math.PI * val))
-                .sum();
+        double chromosome = x[0];
+        double sin = Math.sin(((Math.PI * 5) * chromosome));
 
+        return sin;
     }
 }

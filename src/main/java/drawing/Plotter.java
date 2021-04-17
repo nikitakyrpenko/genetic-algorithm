@@ -2,7 +2,6 @@ package drawing;
 
 import domain.Individual;
 import domain.Population;
-import providers.FitnessFunctionProvider;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -38,11 +37,11 @@ public class Plotter extends JComponent {
     public void setIndividuals(ArrayList<Individual> individuals) {
         this.individuals = individuals;
 
-        /*Individual individual = individuals.get(0);
+        Individual individual = individuals.get(0);
 
         Function<Individual, Double> fitnessFunction = individual.getFitnessFunction();
 
-        Double y = fitnessFunction.apply(individual);*/
+        Double y = fitnessFunction.apply(individual);
     }
 
     public void capture() {
@@ -102,11 +101,11 @@ public class Plotter extends JComponent {
             p.addPoint(X, Y);
         }
 
-        for (Integer x : this.individuals) {
+        /*for (Integer x : this.individuals) {
             int X = w + x;
             int Y = h - (int)Math.round(SCALE * this.func.fx(x / SCALE));
             this.drawIndividual(g1, X, Y);
-        }
+        }*/
 
         g1.drawPolyline(p.xpoints, p.ypoints, p.npoints);
     }

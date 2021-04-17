@@ -82,9 +82,7 @@ public class GGSelectionProvider {
     }
 
     private static Individual findBest(Individual[] individuals){
-        return Stream.of(individuals)
-                .max(Comparator.comparing(Individual::getFitness))
-                .orElseThrow(NoSuchElementException::new);
+       return Collections.max(Arrays.asList(individuals), Comparator.comparing(Individual::getFitness));
     }
 
 }

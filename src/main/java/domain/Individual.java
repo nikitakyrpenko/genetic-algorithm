@@ -46,11 +46,11 @@ public class Individual {
 
     @Override
     public String toString() {
-        String output = "";
-        for (double i : this.chromosome) {
-            output += i;
-        }
-        return output;
+        return "Individual{" +
+                "chromosome=" + Arrays.toString(chromosome) +
+                ", fitness=" + fitness +
+                ", fitnessFunction=" + fitnessFunction +
+                '}';
     }
 
     @Override

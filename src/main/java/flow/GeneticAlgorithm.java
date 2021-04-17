@@ -19,7 +19,7 @@ import java.util.List;
 public class GeneticAlgorithm {
 
     private final List<Double> eclidDistanceHistory;
-    private final List<FUDSMinMaxHealth> fudsMinMaxHealths;
+    private final List<Double> averagePopulationHealth;
     private final int populationSize;
     private final int n;
     private final FitnessFunctionDescription fitnessFunctionDescription;
@@ -31,15 +31,14 @@ public class GeneticAlgorithm {
     public GeneticAlgorithm(int populationSize, int n, FitnessFunctionDescription fitnessFunctionDescription,
                             GGSelectionType ggSelectionType, NewGenerationSelectionType newGenerationSelectionType) {
         this.eclidDistanceHistory = new ArrayList<>();
-        this.fudsMinMaxHealths = new ArrayList<>();
-
         this.populationSize = populationSize;
         this.n = n;
         this.fitnessFunctionDescription = fitnessFunctionDescription;
         this.ggSelectionType = ggSelectionType;
         this.newGenerationSelectionType = newGenerationSelectionType;
-        this.generalSettings = new GeneralSettings(ggSelectionType.numberOfContenders, 3, 0.15, fitnessFunctionDescription.getFitnessFunction(),
+        this.generalSettings = new GeneralSettings(ggSelectionType.numberOfContenders, 3, 0.75, fitnessFunctionDescription.getFitnessFunction(),
                 new GeneRange(fitnessFunctionDescription.getLow(), fitnessFunctionDescription.getHigh()));
+        this.averagePopulationHealth = new ArrayList<>();
 
         this.population = new Population(
                 Generator.generateInitialPopulation(n, populationSize, fitnessFunctionDescription)
@@ -48,28 +47,21 @@ public class GeneticAlgorithm {
 
     public void start(){
         int iteration = 0;
+        generalSettings.setEuclidAverageDistance(Computations.COMPUTE_EUCLID_DISTANCE_FOR_POPULATION(this.population));
 
-        while (isTerminationConditionMet()){
+        while (true){
             iteration++;
 
-            /*fudsMinMaxHealths.add()population.getIndividuals().
-
             selectParent(ggSelectionType, generalSettings);
-            selectInNextGeneration(newGenerationSelectionType, );
-*/
+            selectInNextGeneration(newGenerationSelectionType, null);
         }
     }
 
-    public boolean isTerminationConditionMet() {
-        for (Individual individual : population.getIndividuals()) {
-            if (individual.getFitness() == 1) {
-                return true;
-            }
-        }
+    public boolean isTerminationConditionMet(int iteration, int populationSize) {
+
 
         return false;
     }
-
 
     private void selectParent(GGSelectionType type, GeneralSettings generalSettings) {
         switch (type){
