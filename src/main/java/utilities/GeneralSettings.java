@@ -9,16 +9,15 @@ public class GeneralSettings {
 
     private int tournamentContenders;
     private final int quantityOfSiblings;
-    private final double euclidAverageDistance;
+    private double euclidAverageDistance;
     private final double mutationProbability;
     private final Function<Individual, Double> fitnessFunction;
     private final GeneRange geneRange;
 
 
-    public GeneralSettings(int tournamentContenders, int quantityOfSiblings, float euclidAverageDistance, double mutationProbability, Function<Individual, Double> fitnessFunction, GeneRange geneRange) {
+    public GeneralSettings(int tournamentContenders, int quantityOfSiblings, double mutationProbability, Function<Individual, Double> fitnessFunction, GeneRange geneRange) {
         this.tournamentContenders = tournamentContenders;
         this.quantityOfSiblings = quantityOfSiblings;
-        this.euclidAverageDistance = euclidAverageDistance;
         this.mutationProbability = mutationProbability;
         this.fitnessFunction = fitnessFunction;
         this.geneRange = geneRange;
@@ -50,5 +49,9 @@ public class GeneralSettings {
 
     public void setTournamentContenders(int tournamentContenders) {
         this.tournamentContenders = tournamentContenders;
+    }
+
+    public void setEuclidAverageDistance(double euclidAverageDistance) {
+        this.euclidAverageDistance = euclidAverageDistance;
     }
 }

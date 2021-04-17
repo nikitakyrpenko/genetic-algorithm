@@ -2,7 +2,9 @@ package providers;
 
 import domain.Individual;
 
+import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class FitnessFunctionProvider {
 
@@ -26,4 +28,20 @@ public class FitnessFunctionProvider {
 
         return fitness;
     };
+
+    public static Function<Individual, Double> DEBA = individual -> {
+        double[] chromosome = individual.getChromosome();
+
+        double accum = fx(chromosome);
+
+        return accum * 1 / chromosome.length;
+    };
+
+    public static double fx(double[] x) {
+        /*return Math.sin(5 * Math.PI * x);*/
+        return Arrays.stream(x)
+                .map(val -> Math.sin(5 * Math.PI * val))
+                .sum();
+
+    }
 }

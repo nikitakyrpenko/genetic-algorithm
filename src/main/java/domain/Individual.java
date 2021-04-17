@@ -8,10 +8,16 @@ public class Individual {
 
     private final double[] chromosome;
     private double fitness = -1;
+    private Function<Individual, Double> fitnessFunction;
 
     public Individual(double[] chromosome, Function<Individual, Double> fitnessFunction){
         this.chromosome = chromosome;
         this.fitness = fitnessFunction.apply(this);
+        this.fitnessFunction = fitnessFunction;
+    }
+
+    public Function<Individual, Double> getFitnessFunction() {
+        return fitnessFunction;
     }
 
     public double getFitness() {

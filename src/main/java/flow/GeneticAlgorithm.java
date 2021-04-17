@@ -1,6 +1,7 @@
 package flow;
 
 import computation.Computations;
+import domain.utils.GeneRange;
 import domain.utils.fitness.FitnessFunctionDescription;
 import domain.Individual;
 import domain.Population;
@@ -12,17 +13,33 @@ import providers.enums.GGSelectionType;
 import providers.enums.NewGenerationSelectionType;
 import utilities.GeneralSettings;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GeneticAlgorithm {
 
+    private final List<Double> eclidDistanceHistory;
+    private final List<FUDSMinMaxHealth> fudsMinMaxHealths;
     private final int populationSize;
     private final int n;
     private final FitnessFunctionDescription fitnessFunctionDescription;
     private final Population population;
+    private final GGSelectionType ggSelectionType;
+    private final NewGenerationSelectionType newGenerationSelectionType;
+    private final GeneralSettings generalSettings;
 
-    public GeneticAlgorithm(int populationSize, int n, FitnessFunctionDescription fitnessFunctionDescription) {
+    public GeneticAlgorithm(int populationSize, int n, FitnessFunctionDescription fitnessFunctionDescription,
+                            GGSelectionType ggSelectionType, NewGenerationSelectionType newGenerationSelectionType) {
+        this.eclidDistanceHistory = new ArrayList<>();
+        this.fudsMinMaxHealths = new ArrayList<>();
+
         this.populationSize = populationSize;
         this.n = n;
         this.fitnessFunctionDescription = fitnessFunctionDescription;
+        this.ggSelectionType = ggSelectionType;
+        this.newGenerationSelectionType = newGenerationSelectionType;
+        this.generalSettings = new GeneralSettings(ggSelectionType.numberOfContenders, 3, 0.15, fitnessFunctionDescription.getFitnessFunction(),
+                new GeneRange(fitnessFunctionDescription.getLow(), fitnessFunctionDescription.getHigh()));
 
         this.population = new Population(
                 Generator.generateInitialPopulation(n, populationSize, fitnessFunctionDescription)
@@ -35,8 +52,11 @@ public class GeneticAlgorithm {
         while (isTerminationConditionMet()){
             iteration++;
 
-            this.
+            /*fudsMinMaxHealths.add()population.getIndividuals().
 
+            selectParent(ggSelectionType, generalSettings);
+            selectInNextGeneration(newGenerationSelectionType, );
+*/
         }
     }
 

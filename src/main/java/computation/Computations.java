@@ -35,6 +35,7 @@ public class Computations {
     }
 
 
+
     private static double computeEuclidDistance(Individual from, Individual to){
         return compute(from.getChromosome(), to.getChromosome());
     }
