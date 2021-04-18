@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Test {
     public static void main(String[] args) {
-        List<FUDSHealthLevel> healthLevels = NextGenerationSelectionProvider.generateHealthLevels(new FUDSMinMaxHealth(0.1, 0.8), 0.07);
+        List<FUDSHealthLevel> healthLevels = NextGenerationSelectionProvider.generateHealthLevels(new FUDSMinMaxHealth(), 0.07);
 
         System.out.println(healthLevels);
     }

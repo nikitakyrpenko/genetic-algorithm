@@ -21,7 +21,7 @@ public class NextGenerationSelectionProvider {
 
         List<Individual> parentsPull = population.getParentsPull();
 
-        List<Individual> cleared = new ArrayList<>(parentsPull.subList(2, parentsPull.size()));
+        List<Individual> cleared = new ArrayList<>(parentsPull.subList(3, parentsPull.size()));
 
         population.setPopulation(cleared);
         population.setParentsPull(null);
@@ -33,9 +33,15 @@ public class NextGenerationSelectionProvider {
 
         Random random = new Random();
 
-        Individual dead = lookingHealthLevel.get(random.nextInt(lookingHealthLevel.size()));
+        int size = lookingHealthLevel.size();
 
-        parentsPull.remove(dead);
+        List<Individual> toBeRemoved = new ArrayList<>();
+
+        for (int i = 0; i < 3; i ++){
+            toBeRemoved.add(lookingHealthLevel.get(random.nextInt(size)));
+        }
+
+        parentsPull.removeAll(toBeRemoved);
 
         population.setPopulation(parentsPull);
         population.setParentsPull(null);
@@ -102,8 +108,15 @@ public class NextGenerationSelectionProvider {
         for (Map.Entry<FUDSHealthLevel, List<Individual>> entry : healthLevels.entrySet()){
             List<Individual> individuals = entry.getValue();
 
-            if (individuals.size() >= maxSize){
+            if (individuals.size() > maxSize){
                 maxSize = individuals.size();
+                if (theMostPopulatedLevels.size() != 0){
+                    theMostPopulatedLevels.remove(0);
+                    theMostPopulatedLevels.add(entry.getKey());
+                }else {
+                    theMostPopulatedLevels.add(entry.getKey());
+                }
+            }else if (individuals.size() == maxSize){
                 theMostPopulatedLevels.add(entry.getKey());
             }
         }

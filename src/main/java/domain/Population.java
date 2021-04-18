@@ -20,8 +20,7 @@ public class Population {
     * Used for generate initial Population
     */
     public Population(List<Individual> initialPopulation){
-        this.population = initialPopulation;
-
+        setPopulation(initialPopulation);
     }
 
     public List<Individual> getIndividuals() {
@@ -48,7 +47,7 @@ public class Population {
 
     public void setPopulation(List<Individual> population) {
         this.population = population;
-        this.parentsPull.sort(getFitnessComparator());
+        this.population.sort(getFitnessComparator());
     }
 
     private Comparator<Individual> getFitnessComparator(){
@@ -56,11 +55,12 @@ public class Population {
     }
 
     public Map.Entry<FUDSHealthLevel, List<Individual>> findAllIndividualsByHealthLevel(FUDSHealthLevel healthLevel){
-        List<Individual> individualsByHealthLevel = this.population
+        //TODO :  NOTE : switched to parentsPull instead of population
+        List<Individual> individualsByHealthLevel = this.parentsPull
                 .stream()
                 .filter(individual -> {
                     double health = individual.getFitness();
-                    return health < healthLevel.getHighBound() && health >= healthLevel.getHighBound();
+                    return health < healthLevel.getHighBound() && health >= healthLevel.getLowBound();
                 })
                 .collect(Collectors.toList());
 

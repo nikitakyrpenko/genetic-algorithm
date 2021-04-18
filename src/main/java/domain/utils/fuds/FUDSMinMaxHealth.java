@@ -7,9 +7,9 @@ public class FUDSMinMaxHealth {
     private double maxHealth;
     private double minHealth;
 
-    public FUDSMinMaxHealth(double minHealth, double maxHealth) {
-        this.maxHealth = maxHealth;
-        this.minHealth = minHealth;
+    public FUDSMinMaxHealth() {
+        this.maxHealth = Double.MIN_VALUE;
+        this.minHealth = Double.MAX_VALUE;
     }
 
     public double getMaxHealth() {
@@ -17,7 +17,7 @@ public class FUDSMinMaxHealth {
     }
 
     public void setMaxHealth(double maxHealth) {
-        this.maxHealth = maxHealth;
+        this.maxHealth = Double.max(this.maxHealth, maxHealth);
     }
 
     public double getMinHealth() {
@@ -25,7 +25,7 @@ public class FUDSMinMaxHealth {
     }
 
     public void setMinHealth(double minHealth) {
-        this.minHealth = minHealth;
+        this.minHealth = Double.min(this.minHealth, minHealth);
     }
 
     @Override

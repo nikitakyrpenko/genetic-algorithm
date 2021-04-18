@@ -19,19 +19,18 @@ import java.util.List;
 
 public class GeneticAlgorithm {
 
-    private final List<Double> eclidDistanceHistory;
     private final List<Double> averagePopulationHealth = Collections.synchronizedList(new ArrayList<Double>());
     private final int populationSize;
     private final int n;
     private final FitnessFunctionDescription fitnessFunctionDescription;
-    private  Population population;
+    private final Population population;
     private final GGSelectionType ggSelectionType;
     private final NewGenerationSelectionType newGenerationSelectionType;
     private final GeneralSettings generalSettings;
+    private final FUDSMinMaxHealth fudsMinMaxHealth;
 
     public GeneticAlgorithm(int populationSize, int n, FitnessFunctionDescription fitnessFunctionDescription,
                             GGSelectionType ggSelectionType, NewGenerationSelectionType newGenerationSelectionType) {
-        this.eclidDistanceHistory = new ArrayList<>();
         this.populationSize = populationSize;
         this.n = n;
         this.fitnessFunctionDescription = fitnessFunctionDescription;
@@ -43,25 +42,50 @@ public class GeneticAlgorithm {
         this.population = new Population(
                 Generator.generateInitialPopulation(n, populationSize, fitnessFunctionDescription)
         );
+
+        this.fudsMinMaxHealth = new FUDSMinMaxHealth();
     }
 
     public void start(){
         int iteration = 0;
-        generalSettings.setEuclidAverageDistance(COMPUTE_EUCLID_DISTANCE_FOR_POPULATION());
 
         while (isTerminationConditionMet(iteration, this.populationSize)){
-            iteration++;
+            fudsSetMinMaxHealthValue();
+            checkIsEuclidDistanceRecomputeNeeded(iteration, this.populationSize);
 
             averagePopulationHealth.add(computeAveragePopulationAverageHealth());
 
             selectParent(ggSelectionType, generalSettings);
-            selectInNextGeneration(newGenerationSelectionType, null);
+            selectInNextGeneration(newGenerationSelectionType, this.fudsMinMaxHealth);
         }
+
+        System.out.println(iteration);
+        System.out.println(this.population.getIndividuals());
     }
 
-    public boolean isTerminationConditionMet(int iteration, int populationSize) {
+    private void fudsSetMinMaxHealthValue(){
+        try {
+        List<Individual> individuals = this.population.getIndividuals();
+        Individual ff = individuals.get(0);
+        Individual fl = individuals.get(individuals.size() - 1);
+
+            this.fudsMinMaxHealth.setMinHealth(ff.getFitness());
+            this.fudsMinMaxHealth.setMaxHealth(fl.getFitness());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private boolean isTerminationConditionMet(int iteration, int populationSize) {
 
         return iteration == (40000 * populationSize) || !isPopulationHealthChangedForDelta();
+    }
+
+    private void checkIsEuclidDistanceRecomputeNeeded(int iteration, int populationSize){
+        if (iteration == 0 || iteration == 60 * populationSize){
+            generalSettings.setEuclidAverageDistance(COMPUTE_EUCLID_DISTANCE_FOR_POPULATION());
+        }
     }
 
     private boolean isPopulationHealthChangedForDelta(){
@@ -79,7 +103,7 @@ public class GeneticAlgorithm {
 
             double averageForLastTen = sumOfLastTen / 10;
 
-            if (averageForLastTen > first + delta || averageForLastTen < first - delta)
+            if (Math.abs(averageForLastTen - first) <= delta)
                 return true;
         }else {
             return false;
@@ -117,8 +141,6 @@ public class GeneticAlgorithm {
     }
 
     private double computeAveragePopulationAverageHealth(){
-
-
         double accumulator = 0.0;
 
         for (int i = 0; i < this.population.getIndividuals().size() ; i++){

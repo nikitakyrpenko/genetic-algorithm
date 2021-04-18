@@ -23,6 +23,7 @@ public class GGSelectionProvider {
 
         Individual[] siblings = APPLY_GAUSSIAN_MUTATION_AND_GENERATE_SIBLINGS(settings,tournamentWinner);
 
+
         population.setParentsPull(
                 Stream.concat(
                     individuals.stream(), Arrays.stream(siblings))

@@ -9,8 +9,8 @@ public class Runner {
 
         FitnessFunctionDescription fitnessFunctionDescription = new FitnessFunctionDescription(FitnessFunctionProvider.DEBA, 0 ,1);
 
-        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(10, 1, fitnessFunctionDescription,
-                GGSelectionType.TOUR2, NewGenerationSelectionType.WORST);
+        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(50000, 1, fitnessFunctionDescription,
+                GGSelectionType.TOUR12, NewGenerationSelectionType.FUDS);
 
         geneticAlgorithm.start();
 

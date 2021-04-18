@@ -1,5 +1,7 @@
 package domain;
 
+import computation.ComputationUtils;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Function;
@@ -12,7 +14,7 @@ public class Individual {
 
     public Individual(double[] chromosome, Function<Individual, Double> fitnessFunction){
         this.chromosome = chromosome;
-        this.fitness = fitnessFunction.apply(this);
+        this.fitness = ComputationUtils.round(fitnessFunction.apply(this), 5);
         this.fitnessFunction = fitnessFunction;
     }
 
@@ -50,7 +52,7 @@ public class Individual {
                 "chromosome=" + Arrays.toString(chromosome) +
                 ", fitness=" + fitness +
                 ", fitnessFunction=" + fitnessFunction +
-                '}';
+                "}\n";
     }
 
     @Override
