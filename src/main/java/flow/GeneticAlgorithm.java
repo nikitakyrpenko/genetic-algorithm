@@ -52,8 +52,7 @@ public class GeneticAlgorithm {
         while (isTerminationConditionMet(iteration, this.populationSize)){
             iteration++;
 
-           /* double v = computeAveragePopulationAverageHealth();
-            averagePopulationHealth.add(v);*/
+            averagePopulationHealth.add(computeAveragePopulationAverageHealth());
 
             selectParent(ggSelectionType, generalSettings);
             selectInNextGeneration(newGenerationSelectionType, null);

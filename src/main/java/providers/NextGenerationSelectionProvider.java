@@ -21,7 +21,7 @@ public class NextGenerationSelectionProvider {
 
         List<Individual> parentsPull = population.getParentsPull();
 
-        List<Individual> cleared = parentsPull.subList(2, parentsPull.size());
+        List<Individual> cleared = new ArrayList<>(parentsPull.subList(2, parentsPull.size()));
 
         population.setPopulation(cleared);
         population.setParentsPull(null);

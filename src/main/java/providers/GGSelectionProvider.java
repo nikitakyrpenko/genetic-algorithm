@@ -70,12 +70,13 @@ public class GGSelectionProvider {
     }
 
     private static Individual generateTournamentMembersByNumbersOfContendersAndComputeWinner(int numberOfContenders, List<Individual> initialPopulation){
+        int size = initialPopulation.size();
 
         Random random = new Random();
         Individual[] tournamentMembers = new Individual[numberOfContenders];
 
         for (int i = 0; i < numberOfContenders; i++){
-            tournamentMembers[i] = initialPopulation.get(random.nextInt(initialPopulation.size()));
+            tournamentMembers[i] = initialPopulation.get(random.nextInt(size));
         }
 
         return findBest(tournamentMembers);

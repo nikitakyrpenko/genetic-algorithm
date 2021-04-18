@@ -64,7 +64,7 @@ public class Population {
                 })
                 .collect(Collectors.toList());
 
-        return Map.entry(healthLevel, individualsByHealthLevel);
+        return new AbstractMap.SimpleEntry<>(healthLevel, individualsByHealthLevel);
     }
 
     @Override

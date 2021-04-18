@@ -40,7 +40,7 @@ public class FitnessFunctionProvider {
     public static double fx(double[] x) {
         /*return Math.sin(5 * Math.PI * x);*/
         double chromosome = x[0];
-        double sin = Math.sin(((Math.PI * 5) * chromosome));
+        double sin = Math.pow(Math.sin(((Math.PI * 5) * chromosome)), 6);
 
         return sin;
     }
