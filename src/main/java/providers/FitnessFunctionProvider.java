@@ -32,16 +32,8 @@ public class FitnessFunctionProvider {
     public static Function<Individual, Double> DEBA = individual -> {
         double[] chromosome = individual.getChromosome();
 
-        double accum = fx(chromosome);
+        double sin = Math.pow(Math.sin(((Math.PI * 5) * chromosome[0])), 6);
 
-        return accum * (1 / chromosome.length);
+        return sin * (1 / chromosome.length);
     };
-
-    public static double fx(double[] x) {
-        /*return Math.sin(5 * Math.PI * x);*/
-        double chromosome = x[0];
-        double sin = Math.pow(Math.sin(((Math.PI * 5) * chromosome)), 6);
-
-        return sin;
-    }
 }

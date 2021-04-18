@@ -46,7 +46,7 @@ public class GeneticAlgorithm {
         this.fudsMinMaxHealth = new FUDSMinMaxHealth();
     }
 
-    public void start(){
+    public List<Individual> start(){
         int iteration = 0;
 
         while (isTerminationConditionMet(iteration, this.populationSize)){
@@ -61,6 +61,7 @@ public class GeneticAlgorithm {
 
         System.out.println(iteration);
         System.out.println(this.population.getIndividuals());
+        return this.population.getIndividuals();
     }
 
     private void fudsSetMinMaxHealthValue(){
