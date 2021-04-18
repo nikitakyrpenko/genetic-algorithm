@@ -6,6 +6,7 @@ import domain.utils.fitness.FitnessFunctionDescription;
 import domain.Individual;
 import domain.Population;
 import domain.utils.fuds.FUDSMinMaxHealth;
+import drawing.Plotter;
 import generator.Generator;
 import providers.GGSelectionProvider;
 import providers.NextGenerationSelectionProvider;
@@ -46,8 +47,10 @@ public class GeneticAlgorithm {
         this.fudsMinMaxHealth = new FUDSMinMaxHealth();
     }
 
-    public List<Individual> start(){
+    public void start(Plotter p){
         int iteration = 0;
+
+        p.setFunction(this.fitnessFunctionDescription);
 
         while (isTerminationConditionMet(iteration, this.populationSize)){
             fudsSetMinMaxHealthValue();
@@ -57,11 +60,17 @@ public class GeneticAlgorithm {
 
             selectParent(ggSelectionType, generalSettings);
             selectInNextGeneration(newGenerationSelectionType, this.fudsMinMaxHealth);
+            if (iteration % 250 == 0) {
+                p.setIndividuals(this.population.getIndividuals());
+                p.draw();
+                p.capture();
+                p.close();
+            }
+            iteration++;
         }
 
         System.out.println(iteration);
         System.out.println(this.population.getIndividuals());
-        return this.population.getIndividuals();
     }
 
     private void fudsSetMinMaxHealthValue(){

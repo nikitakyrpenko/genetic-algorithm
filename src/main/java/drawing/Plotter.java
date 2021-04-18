@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
@@ -23,8 +22,8 @@ public class Plotter extends JComponent {
     private double minY = 0;
     private Function<Double, Double> func;
     private List<Individual> individuals;
-    private JFrame frame = new JFrame();
-    private String title;
+    private JFrame frame;
+    private String title = "Function";
     private int width = 800;
     private int height = 800;
 
@@ -48,11 +47,12 @@ public class Plotter extends JComponent {
         this.title = t;
     }
 
-    public void setIndividuals(ArrayList<Individual> individuals) {
+    public void setIndividuals(List<Individual> individuals) {
         this.individuals = individuals;
     }
 
     public void capture() {
+        if (this.frame == null) { return; }
         Component c = this.frame.getContentPane();
         BufferedImage image = new BufferedImage(c.getWidth(), c.getHeight(), BufferedImage.TYPE_INT_RGB);
         c.paint(image.getGraphics());
@@ -60,13 +60,14 @@ public class Plotter extends JComponent {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
         try {
-            ImageIO.write(image, "png", new File("snapshot_" + date + ".png"));
+            ImageIO.write(image, "png", new File("screenshots/" + this.title + "_" + date + ".png"));
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
     public void draw() {
+        this.frame = new JFrame();
         this.frame.setSize(this.width, this.height);
         this.frame.setTitle(this.title);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -122,5 +123,10 @@ public class Plotter extends JComponent {
         }
 
         g1.drawPolyline(p.xpoints, p.ypoints, p.npoints);
+    }
+
+    public void close() {
+        this.frame.dispose();
+        this.frame = null;
     }
 }

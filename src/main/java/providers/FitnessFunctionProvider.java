@@ -29,11 +29,43 @@ public class FitnessFunctionProvider {
         return fitness;
     };
 
-    public static Function<Individual, Double> DEBA = individual -> {
-        double[] chromosome = individual.getChromosome();
+    public static Function<Individual, Double> DEBA1 = individual -> {
+        double[] chromosomes = individual.getChromosome();
 
-        double sin = Math.pow(Math.sin(((Math.PI * 5) * chromosome[0])), 6);
+        double result = 0;
+        for (double c : chromosomes) {
+            result += Math.pow(Math.sin(((Math.PI * 5) * c)), 6);
+        }
 
-        return sin * (1 / chromosome.length);
+        return result * (1 / chromosomes.length);
+    };
+
+    public static Function<Individual, Double> DEBA2 = individual -> {
+        double[] chromosomes = individual.getChromosome();
+        double result = 0;
+        for (double c : chromosomes) {
+            result += Math.exp(-2*Math.log(2)*Math.pow((c-0.1)/0.8, 2)) * Math.pow(Math.sin(Math.PI*5*c), 6);
+        }
+        return result;
+    };
+
+    public static Function<Individual, Double> DEBA3 = individual -> {
+        double[] chromosomes = individual.getChromosome();
+
+        double result = 0;
+        for (double c : chromosomes) {
+            result += Math.pow(Math.sin((Math.PI * 5) * (Math.pow(c, 0.75) - 0.05)), 6);
+        }
+
+        return result * (1 / chromosomes.length);
+    };
+
+    public static Function<Individual, Double> DEBA4 = individual -> {
+        double[] chromosomes = individual.getChromosome();
+        double result = 0;
+        for (double c : chromosomes) {
+            result += Math.exp(-2*Math.log(2)*Math.pow((c-0.08)/0.854, 2)) * Math.pow(Math.sin(Math.PI*5*(Math.pow(c, 0.75) - 0.05)), 6);
+        }
+        return result;
     };
 }
