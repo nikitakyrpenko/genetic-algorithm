@@ -12,7 +12,7 @@ import static computation.ComputationUtils.generateDoubleInRange;
 
 public class Generator {
 
-    public static List<Individual> generateInitialPopulation(int n,
+    public static List<Individual>  generateInitialPopulation(int n,
                                                              int populationSize,
                                                              FitnessFunctionDescription fitnessFunctionDescription){
         List<Individual> individuals = new ArrayList<>();

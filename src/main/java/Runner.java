@@ -1,14 +1,10 @@
-import domain.Individual;
 import domain.utils.fitness.FitnessFunctionDescription;
 import flow.GeneticAlgorithm;
 import providers.FitnessFunctionProvider;
 import providers.enums.GGSelectionType;
 import providers.enums.NewGenerationSelectionType;
 
-import java.util.Arrays;
-
 public class Runner {
-
     public static void main(String[] args) {
 
         FitnessFunctionDescription fitnessFunctionDescription = new FitnessFunctionDescription(FitnessFunctionProvider.DEBA, 0 ,1);

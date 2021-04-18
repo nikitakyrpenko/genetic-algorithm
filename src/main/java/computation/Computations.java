@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 public class Computations {
 
-    public static double COMPUTE_EUCLID_DISTANCE_FOR_POPULATION(Population population){
+ /*   public static double COMPUTE_EUCLID_DISTANCE_FOR_POPULATION(Population population){
         List<Individual> individuals = population.getIndividuals();
 
         double accumulator = 0.0;
@@ -26,12 +26,7 @@ public class Computations {
     }
 
     public static double COMPUTE_AVERAGE_POPULATION_HEALTH(Population population){
-        double accumulator = 0.0;
 
-        for(Individual individual : population.getIndividuals())
-            accumulator += individual.getFitness();
-
-        return accumulator/population.size();
     }
 
 
@@ -47,5 +42,5 @@ public class Computations {
             accumulator += Math.pow(from[i] - to[i], 2.0);
         }
         return Math.sqrt(accumulator);
-    }
+    }*/
 }

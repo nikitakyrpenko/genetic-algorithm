@@ -14,16 +14,17 @@ import providers.enums.NewGenerationSelectionType;
 import utilities.GeneralSettings;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GeneticAlgorithm {
 
     private final List<Double> eclidDistanceHistory;
-    private final List<Double> averagePopulationHealth;
+    private final List<Double> averagePopulationHealth = Collections.synchronizedList(new ArrayList<Double>());
     private final int populationSize;
     private final int n;
     private final FitnessFunctionDescription fitnessFunctionDescription;
-    private final Population population;
+    private  Population population;
     private final GGSelectionType ggSelectionType;
     private final NewGenerationSelectionType newGenerationSelectionType;
     private final GeneralSettings generalSettings;
@@ -38,7 +39,6 @@ public class GeneticAlgorithm {
         this.newGenerationSelectionType = newGenerationSelectionType;
         this.generalSettings = new GeneralSettings(ggSelectionType.numberOfContenders, 3, 0.75, fitnessFunctionDescription.getFitnessFunction(),
                 new GeneRange(fitnessFunctionDescription.getLow(), fitnessFunctionDescription.getHigh()));
-        this.averagePopulationHealth = new ArrayList<>();
 
         this.population = new Population(
                 Generator.generateInitialPopulation(n, populationSize, fitnessFunctionDescription)
@@ -47,10 +47,13 @@ public class GeneticAlgorithm {
 
     public void start(){
         int iteration = 0;
-        generalSettings.setEuclidAverageDistance(Computations.COMPUTE_EUCLID_DISTANCE_FOR_POPULATION(this.population));
+        generalSettings.setEuclidAverageDistance(COMPUTE_EUCLID_DISTANCE_FOR_POPULATION());
 
-        while (true){
+        while (isTerminationConditionMet(iteration, this.populationSize)){
             iteration++;
+
+           /* double v = computeAveragePopulationAverageHealth();
+            averagePopulationHealth.add(v);*/
 
             selectParent(ggSelectionType, generalSettings);
             selectInNextGeneration(newGenerationSelectionType, null);
@@ -59,7 +62,29 @@ public class GeneticAlgorithm {
 
     public boolean isTerminationConditionMet(int iteration, int populationSize) {
 
+        return iteration == (40000 * populationSize) || !isPopulationHealthChangedForDelta();
+    }
 
+    private boolean isPopulationHealthChangedForDelta(){
+        int currentSize = averagePopulationHealth.size();
+        double delta = 0.0001;
+
+        if (currentSize >= 10) {
+            List<Double> lastTen = new ArrayList<>(averagePopulationHealth.subList(currentSize - 10, currentSize));
+
+            Double first = lastTen.get(0);
+
+            double sumOfLastTen = lastTen
+                    .stream()
+                    .reduce(0.0, Double::sum);
+
+            double averageForLastTen = sumOfLastTen / 10;
+
+            if (averageForLastTen > first + delta || averageForLastTen < first - delta)
+                return true;
+        }else {
+            return false;
+        }
         return false;
     }
 
@@ -92,12 +117,45 @@ public class GeneticAlgorithm {
        }
     }
 
-    private double computeEuclidDistance(){
-        return Computations.COMPUTE_EUCLID_DISTANCE_FOR_POPULATION(this.population);
-    }
-
     private double computeAveragePopulationAverageHealth(){
-        return Computations.COMPUTE_AVERAGE_POPULATION_HEALTH(this.population);
+
+
+        double accumulator = 0.0;
+
+        for (int i = 0; i < this.population.getIndividuals().size() ; i++){
+            accumulator += this.population.getIndividuals().get(i).getFitness();
+        }
+
+        return accumulator/this.population.size();
     }
 
+    public  double COMPUTE_EUCLID_DISTANCE_FOR_POPULATION(){
+        List<Individual> individuals = this.population.getIndividuals();
+
+        double accumulator = 0.0;
+        int distancesCount = 0;
+
+        for (int i = 0; i < individuals.size(); i++){
+            for (int j = i+1; j < individuals.size(); j++){
+                accumulator += computeEuclidDistance(individuals.get(i), individuals.get(j));
+                distancesCount++;
+            }
+        }
+
+        return accumulator / distancesCount;
+
+    }
+
+    private  double computeEuclidDistance(Individual from, Individual to){
+        return compute(from.getChromosome(), to.getChromosome());
+    }
+
+    private  double compute(double[] from, double[] to){
+        double accumulator = 0.0;
+
+        for (int i = 0; i < from.length && i < to.length; i++){
+            accumulator += Math.pow(from[i] - to[i], 2.0);
+        }
+        return Math.sqrt(accumulator);
+    }
 }
