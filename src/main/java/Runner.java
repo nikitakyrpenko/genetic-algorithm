@@ -11,7 +11,7 @@ public class Runner {
         FitnessFunctionDescription fitnessFunctionDescription = new FitnessFunctionDescription(FitnessFunctionProvider.DEBA4, 0 ,1);
 
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(5000, 1, fitnessFunctionDescription,
-                GGSelectionType.TOUR2, NewGenerationSelectionType.WORST);
+                GGSelectionType.MOD_TOUR2, NewGenerationSelectionType.WORST);
 
         Plotter p = new Plotter();
         p.setYBounds(-0.1, 1.2);

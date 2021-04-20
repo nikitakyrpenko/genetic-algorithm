@@ -131,6 +131,10 @@ public class GeneticAlgorithm {
                 generalSettings.setTournamentContenders(12);
                 GGSelectionProvider.TOUR_SELECTION.accept(generalSettings, this.population);
                 break;
+            case MOD_TOUR2:
+                generalSettings.setTournamentContenders(2);
+                GGSelectionProvider.MOD_TOUR_SELECTION.accept(generalSettings, this.population);
+                break;
         }
     }
 
